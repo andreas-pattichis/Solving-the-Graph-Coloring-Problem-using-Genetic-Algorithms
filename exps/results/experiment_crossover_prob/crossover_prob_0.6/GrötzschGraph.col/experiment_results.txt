@@ -1,0 +1,55 @@
+Experiment: crossover_prob_0.6
+Graph: GrötzschGraph.col
+
+Run 1:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 6), (4, 0), (5, 6), (6, 4), (7, 3), (8, 4), (9, 3), (10, 6), (11, 4)]
+Fitness value: 275.0
+Number of colors used: 4
+
+Run 2:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 4), (4, 7), (5, 9), (6, 7), (7, 1), (8, 3), (9, 0), (10, 9), (11, 7)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Run 3:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 9), (4, 6), (5, 1), (6, 3), (7, 0), (8, 1), (9, 3), (10, 1), (11, 9)]
+Fitness value: 220.0
+Number of colors used: 5
+
+Run 4:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 4), (4, 8), (5, 5), (6, 8), (7, 5), (8, 6), (9, 2), (10, 6), (11, 2)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Run 5:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 7), (4, 4), (5, 9), (6, 1), (7, 0), (8, 1), (9, 4), (10, 9), (11, 3)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Run 6:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 8), (4, 9), (5, 5), (6, 8), (7, 10), (8, 8), (9, 10), (10, 5), (11, 9)]
+Fitness value: 220.0
+Number of colors used: 5
+
+Run 7:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 7), (4, 0), (5, 8), (6, 1), (7, 9), (8, 7), (9, 9), (10, 8), (11, 7)]
+Fitness value: 220.0
+Number of colors used: 5
+
+Run 8:
+Individual (node, color pairs): [(1, 0), (2, 1), (3, 10), (4, 0), (5, 10), (6, 0), (7, 5), (8, 4), (9, 1), (10, 4), (11, 7)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Run 9:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 1), (4, 4), (5, 2), (6, 9), (7, 8), (8, 2), (9, 0), (10, 2), (11, 9)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Run 10:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 10), (4, 0), (5, 10), (6, 6), (7, 8), (8, 9), (9, 4), (10, 9), (11, 4)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Average total time for 10 runs: 0.27 seconds
+Average fitness value over 10 runs: 203.50
