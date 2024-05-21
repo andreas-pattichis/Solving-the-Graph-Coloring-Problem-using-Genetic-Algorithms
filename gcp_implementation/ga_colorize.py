@@ -1,7 +1,7 @@
 import math
 import random
 
-from graph import Graph
+from gcp_implementation.graph import Graph
 from tabulate import tabulate
 
 
