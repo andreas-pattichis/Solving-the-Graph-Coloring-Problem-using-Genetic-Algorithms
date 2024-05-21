@@ -1,0 +1,55 @@
+Experiment: baseline
+Graph: PetersenGraph.col
+
+Run 1:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 4), (4, 5), (5, 7), (6, 5), (7, 7), (8, 0), (9, 6), (10, 6)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 2:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 4), (4, 6), (5, 0), (6, 1), (7, 7), (8, 1), (9, 0), (10, 3)]
+Fitness value: 166.66666666666666
+Number of colors used: 6
+
+Run 3:
+Individual (node, color pairs): [(1, 0), (2, 2), (3, 5), (4, 0), (5, 8), (6, 0), (7, 8), (8, 2), (9, 2), (10, 6)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 4:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 1), (4, 0), (5, 3), (6, 8), (7, 3), (8, 6), (9, 9), (10, 8)]
+Fitness value: 166.66666666666666
+Number of colors used: 6
+
+Run 5:
+Individual (node, color pairs): [(1, 0), (2, 8), (3, 0), (4, 1), (5, 3), (6, 0), (7, 7), (8, 8), (9, 9), (10, 1)]
+Fitness value: 166.66666666666666
+Number of colors used: 6
+
+Run 6:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 1), (4, 3), (5, 4), (6, 1), (7, 9), (8, 5), (9, 5), (10, 3)]
+Fitness value: 166.66666666666666
+Number of colors used: 6
+
+Run 7:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 3), (4, 0), (5, 1), (6, 5), (7, 1), (8, 0), (9, 7), (10, 5)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 8:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 2), (4, 7), (5, 4), (6, 2), (7, 4), (8, 2), (9, 0), (10, 8)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 9:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 5), (4, 8), (5, 4), (6, 3), (7, 4), (8, 9), (9, 0), (10, 8)]
+Fitness value: 166.66666666666666
+Number of colors used: 6
+
+Run 10:
+Individual (node, color pairs): [(1, 0), (2, 4), (3, 6), (4, 1), (5, 5), (6, 0), (7, 5), (8, 6), (9, 4), (10, 1)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Average total time for 10 runs: 0.18 seconds
+Average fitness value over 10 runs: 183.33
