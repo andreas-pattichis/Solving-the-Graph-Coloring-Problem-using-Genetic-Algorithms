@@ -145,13 +145,12 @@ def save_results_csv(filename, generation_times, total_times, fitness_values, av
     df.to_csv(filename, index=False, encoding='utf-8')
 
 
-def aggregate_experiment_results(results_folder, ga_params_name):
+def aggregate_experiment_results(experiment_results_folder):
     aggregate_data = []
 
-    experiment_folders = [f.path for f in os.scandir(results_folder) if f.is_dir()]
+    graph_folders = [f.path for f in os.scandir(experiment_results_folder) if f.is_dir()]
 
-    for folder in experiment_folders:
-        experiment_name = os.path.basename(folder).replace(f"{ga_params_name}_", "")
+    for folder in graph_folders:
         for file in os.listdir(folder):
             if file.endswith("experiment_results.csv"):
                 df = pd.read_csv(os.path.join(folder, file))
@@ -175,7 +174,7 @@ def aggregate_experiment_results(results_folder, ga_params_name):
         overall_avg['Graph'] = 'Overall'
         summary = pd.concat([summary, pd.DataFrame([overall_avg])], ignore_index=True)
 
-        summary_file = os.path.join(results_folder, f"{ga_params_name}_aggregate_summary.csv")
+        summary_file = os.path.join(experiment_results_folder, "aggregate_summary.csv")
         summary.to_csv(summary_file, index=False, encoding='utf-8')
 
 
@@ -187,10 +186,13 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
     for ga_params_file in os.listdir(ga_params_folder):
         ga_params_path = os.path.join(ga_params_folder, ga_params_file)
         experiment_name = os.path.splitext(ga_params_file)[0]
+        experiment_results_folder = os.path.join(results_folder, experiment_name)
+        os.makedirs(experiment_results_folder, exist_ok=True)
+
         for graph_file in os.listdir(graphs_folder):
             graph_path = os.path.join(graphs_folder, graph_file)
             graph_name = os.path.splitext(graph_file)[0]
-            output_dir = os.path.join(results_folder, f"{graph_name}_{experiment_name}")
+            output_dir = os.path.join(experiment_results_folder, graph_name)
             os.makedirs(output_dir, exist_ok=True)
 
             generation_times, total_times, fitness_values, best_fitness_per_generation, run_results = run_experiment(
@@ -206,11 +208,11 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
             save_results_csv(csv_filename, generation_times, total_times, fitness_values, avg_total_time, avg_fitness,
                              experiment_name, graph_name, run_results)
 
-    aggregate_experiment_results(results_folder, ga_params_name)
+        aggregate_experiment_results(experiment_results_folder)
 
 
 def main():
-    ga_params_folder = 'dataset/ga_params/experiment_baseline'  # Change as needed
+    ga_params_folder = 'dataset/ga_params/experiment_crossover_prob'  # Change as needed
     graphs_folder = 'dataset/graphs/dataset_small'  # Change as needed
     results_folder = 'exps/results'  # Change as needed
 
