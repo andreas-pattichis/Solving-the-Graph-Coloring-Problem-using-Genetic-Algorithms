@@ -14,7 +14,7 @@ if __name__ == '__main__':
         print(edge)
 
 colorizer = ga_colorize.GAColorize('../dataset/graphs/dataset_small/example_graph.txt',
-                                   '../dataset/ga_params/experiment_baseline/baseline_ga_params.txt')
+                                   '../dataset/ga_params/experiment_baseline/baseline.txt')
 
 results = colorizer.run_genetic_algorithm()
 best_fitness = 0

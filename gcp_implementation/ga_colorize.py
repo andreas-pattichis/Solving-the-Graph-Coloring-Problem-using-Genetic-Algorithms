@@ -311,4 +311,4 @@ class GAColorize:
         return results
 
 # Example usage
-# GAColorize('example_graph.txt', 'baseline_ga_params.txt')
+# GAColorize('example_graph.txt', 'baseline.txt')
