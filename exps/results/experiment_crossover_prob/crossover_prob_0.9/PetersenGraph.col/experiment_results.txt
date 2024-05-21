@@ -1,0 +1,55 @@
+Experiment: crossover_prob_0.9
+Graph: PetersenGraph.col
+
+Run 1:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 7), (4, 1), (5, 0), (6, 7), (7, 0), (8, 7), (9, 8), (10, 5)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 2:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 1), (4, 6), (5, 5), (6, 6), (7, 0), (8, 1), (9, 5), (10, 3)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 3:
+Individual (node, color pairs): [(1, 0), (2, 6), (3, 2), (4, 6), (5, 0), (6, 3), (7, 9), (8, 6), (9, 2), (10, 3)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 4:
+Individual (node, color pairs): [(1, 0), (2, 4), (3, 0), (4, 4), (5, 0), (6, 1), (7, 5), (8, 7), (9, 0), (10, 1)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 5:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 7), (4, 6), (5, 0), (6, 2), (7, 9), (8, 2), (9, 7), (10, 6)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 6:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 9), (4, 8), (5, 0), (6, 8), (7, 1), (8, 9), (9, 4), (10, 4)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 7:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 5), (4, 0), (5, 6), (6, 4), (7, 0), (8, 5), (9, 5), (10, 9)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 8:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 4), (4, 6), (5, 5), (6, 7), (7, 6), (8, 7), (9, 4), (10, 1)]
+Fitness value: 166.66666666666666
+Number of colors used: 6
+
+Run 9:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 3), (4, 7), (5, 0), (6, 5), (7, 4), (8, 3), (9, 0), (10, 5)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Run 10:
+Individual (node, color pairs): [(1, 0), (2, 3), (3, 9), (4, 6), (5, 9), (6, 4), (7, 6), (8, 0), (9, 3), (10, 4)]
+Fitness value: 200.0
+Number of colors used: 5
+
+Average total time for 10 runs: 0.20 seconds
+Average fitness value over 10 runs: 196.67

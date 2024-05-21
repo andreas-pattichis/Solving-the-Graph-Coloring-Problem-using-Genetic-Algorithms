@@ -1,0 +1,55 @@
+Experiment: crossover_prob_0.8
+Graph: GrötzschGraph.col
+
+Run 1:
+Individual (node, color pairs): [(1, 0), (2, 2), (3, 8), (4, 4), (5, 0), (6, 10), (7, 2), (8, 0), (9, 10), (10, 0), (11, 4)]
+Fitness value: 220.0
+Number of colors used: 5
+
+Run 2:
+Individual (node, color pairs): [(1, 0), (2, 8), (3, 1), (4, 3), (5, 10), (6, 0), (7, 10), (8, 0), (9, 8), (10, 9), (11, 3)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Run 3:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 3), (4, 0), (5, 2), (6, 7), (7, 0), (8, 6), (9, 0), (10, 10), (11, 3)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Run 4:
+Individual (node, color pairs): [(1, 0), (2, 2), (3, 9), (4, 0), (5, 9), (6, 5), (7, 2), (8, 9), (9, 0), (10, 7), (11, 0)]
+Fitness value: 220.0
+Number of colors used: 5
+
+Run 5:
+Individual (node, color pairs): [(1, 0), (2, 2), (3, 3), (4, 0), (5, 6), (6, 5), (7, 6), (8, 3), (9, 2), (10, 9), (11, 0)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Run 6:
+Individual (node, color pairs): [(1, 0), (2, 8), (3, 5), (4, 2), (5, 0), (6, 2), (7, 1), (8, 5), (9, 10), (10, 8), (11, 5)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Run 7:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 10), (4, 0), (5, 6), (6, 10), (7, 0), (8, 10), (9, 5), (10, 2), (11, 5)]
+Fitness value: 220.0
+Number of colors used: 5
+
+Run 8:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 4), (4, 3), (5, 8), (6, 10), (7, 8), (8, 10), (9, 2), (10, 8), (11, 10)]
+Fitness value: 183.33333333333334
+Number of colors used: 6
+
+Run 9:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 8), (4, 7), (5, 10), (6, 7), (7, 1), (8, 10), (9, 0), (10, 10), (11, 7)]
+Fitness value: 220.0
+Number of colors used: 5
+
+Run 10:
+Individual (node, color pairs): [(1, 0), (2, 1), (3, 4), (4, 1), (5, 7), (6, 6), (7, 1), (8, 7), (9, 1), (10, 4), (11, 6)]
+Fitness value: 220.0
+Number of colors used: 5
+
+Average total time for 10 runs: 0.28 seconds
+Average fitness value over 10 runs: 201.67
