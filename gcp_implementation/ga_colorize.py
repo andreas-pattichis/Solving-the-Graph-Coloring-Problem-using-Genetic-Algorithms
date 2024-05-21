@@ -16,7 +16,7 @@ class GAColorize:
         self.ga_params['num_nodes'] = len(self.graph.nodes)
         self.ga_params['num_edges'] = len(self.graph.edges)
         self.ga_params['bits_per_individual'] = math.ceil(math.log2(self.ga_params['num_nodes']))
-        self.print_params()
+        # self.print_params()
 
     def load_ga_params(self, path):
         """
@@ -311,4 +311,4 @@ class GAColorize:
         return results
 
 # Example usage
-# GAColorize('example_graph.txt', 'example_ga_params.txt')
+# GAColorize('example_graph.txt', 'baseline_ga_params.txt')

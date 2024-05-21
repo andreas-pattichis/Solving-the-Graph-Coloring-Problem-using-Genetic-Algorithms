@@ -13,14 +13,19 @@ if __name__ == '__main__':
     for edge in graph.edges:
         print(edge)
 
-colorizer = ga_colorize.GAColorize('example_graph.txt', 'example_ga_params.txt')
+colorizer = ga_colorize.GAColorize('example_graph.txt', 'baseline_ga_params.txt')
 
 results = colorizer.run_genetic_algorithm()
-# print(results)
 best_fitness = 0
 for individual, fitness in results:
     if fitness > best_fitness:
         solution = individual
         best_fitness = fitness
-print(f"Individual: {colorizer.decode_individual(solution)}, fitness: {best_fitness}")
-print(f"Number of colors: {len(set(col for _, col in colorizer.decode_individual(solution)))}")
+
+decoded_solution = colorizer.decode_individual(solution)
+num_colors = len(set(col for _, col in decoded_solution))
+
+print("\nBest solution found by the genetic algorithm:")
+print(f"Individual (node, color pairs): {decoded_solution}")
+print(f"Fitness value: {best_fitness}")
+print(f"Number of colors used: {num_colors}")
