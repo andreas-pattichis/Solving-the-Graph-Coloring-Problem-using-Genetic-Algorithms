@@ -5,6 +5,7 @@ import pandas as pd
 from gcp_implementation.graph import Graph
 import gcp_implementation.ga_colorize as ga_colorize
 
+
 def run_experiment(graph_path, ga_params_path):
     colorizer = ga_colorize.GAColorize(graph_path, ga_params_path)
     ga_params = colorizer.ga_params
@@ -59,7 +60,9 @@ def run_experiment(graph_path, ga_params_path):
 
     return generation_times, total_times, fitness_values, best_fitness_per_generation, run_results
 
-def plot_results(generation_times, total_times, fitness_values, best_fitness_per_generation, output_dir, experiment_name, graph_name):
+
+def plot_results(generation_times, total_times, fitness_values, best_fitness_per_generation, output_dir,
+                 experiment_name, graph_name):
     num_runs = len(generation_times)
     num_generations = len(generation_times[0])
 
@@ -101,6 +104,7 @@ def plot_results(generation_times, total_times, fitness_values, best_fitness_per
     plt.savefig(os.path.join(output_dir, 'best_fitness_per_generation.png'), bbox_inches='tight')
     plt.close()
 
+
 def save_results(filename, run_results, avg_total_time, avg_fitness, experiment_name, graph_name):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(f"Experiment: {experiment_name}\n")
@@ -114,7 +118,9 @@ def save_results(filename, run_results, avg_total_time, avg_fitness, experiment_
         file.write(f"Average total time for {len(run_results)} runs: {avg_total_time:.2f} seconds\n")
         file.write(f"Average fitness value over {len(run_results)} runs: {avg_fitness:.2f}\n")
 
-def save_results_csv(filename, generation_times, total_times, fitness_values, avg_total_time, avg_fitness, experiment_name, graph_name, run_results):
+
+def save_results_csv(filename, generation_times, total_times, fitness_values, avg_total_time, avg_fitness,
+                     experiment_name, graph_name, run_results):
     num_runs = len(generation_times)
     num_generations = len(generation_times[0])
 
@@ -137,6 +143,7 @@ def save_results_csv(filename, generation_times, total_times, fitness_values, av
 
     df = pd.DataFrame(data)
     df.to_csv(filename, index=False, encoding='utf-8')
+
 
 def aggregate_experiment_results(results_folder, ga_params_name):
     aggregate_data = []
@@ -171,6 +178,7 @@ def aggregate_experiment_results(results_folder, ga_params_name):
         summary_file = os.path.join(results_folder, f"{ga_params_name}_aggregate_summary.csv")
         summary.to_csv(summary_file, index=False, encoding='utf-8')
 
+
 def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
     ga_params_name = os.path.basename(ga_params_folder)
     results_folder = os.path.join(results_folder, ga_params_name)
@@ -185,17 +193,21 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
             output_dir = os.path.join(results_folder, f"{graph_name}_{experiment_name}")
             os.makedirs(output_dir, exist_ok=True)
 
-            generation_times, total_times, fitness_values, best_fitness_per_generation, run_results = run_experiment(graph_path, ga_params_path)
-            plot_results(generation_times, total_times, fitness_values, best_fitness_per_generation, output_dir, experiment_name, graph_name)
+            generation_times, total_times, fitness_values, best_fitness_per_generation, run_results = run_experiment(
+                graph_path, ga_params_path)
+            plot_results(generation_times, total_times, fitness_values, best_fitness_per_generation, output_dir,
+                         experiment_name, graph_name)
 
             avg_total_time = sum(total_times) / len(total_times)
             avg_fitness = sum(fitness_values) / len(fitness_values)
             results_filename = os.path.join(output_dir, 'experiment_results.txt')
             save_results(results_filename, run_results, avg_total_time, avg_fitness, experiment_name, graph_name)
             csv_filename = os.path.join(output_dir, 'experiment_results.csv')
-            save_results_csv(csv_filename, generation_times, total_times, fitness_values, avg_total_time, avg_fitness, experiment_name, graph_name, run_results)
+            save_results_csv(csv_filename, generation_times, total_times, fitness_values, avg_total_time, avg_fitness,
+                             experiment_name, graph_name, run_results)
 
     aggregate_experiment_results(results_folder, ga_params_name)
+
 
 def main():
     ga_params_folder = 'dataset/ga_params/experiment_baseline'  # Change as needed
@@ -206,6 +218,7 @@ def main():
 
     # Print that the experiment has finished
     print("All experiments finished.")
+
 
 if __name__ == '__main__':
     main()
