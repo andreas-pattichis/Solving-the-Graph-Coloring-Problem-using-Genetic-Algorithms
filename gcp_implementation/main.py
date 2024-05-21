@@ -13,7 +13,7 @@ if __name__ == '__main__':
     for edge in graph.edges:
         print(edge)
 
-colorizer = ga_colorize.GAColorize('example_graph.txt', 'baseline_ga_params.txt')
+colorizer = ga_colorize.GAColorize('example_graph.txt', '../dataset/ga_params/baseline_ga_params.txt')
 
 results = colorizer.run_genetic_algorithm()
 best_fitness = 0
