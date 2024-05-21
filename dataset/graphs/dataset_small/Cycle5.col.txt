@@ -1,0 +1,7 @@
+c FILE: Cycle5.col
+n 1 2 3 4 5
+e 1 2 1
+e 2 3 1
+e 3 4 1
+e 4 5 1
+e 5 1 1
