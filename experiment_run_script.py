@@ -212,7 +212,7 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
 
 
 def main():
-    ga_params_folder = 'dataset/ga_params/experiment_crossover_prob'  # Change as needed
+    ga_params_folder = 'dataset/ga_params/experiment_baseline'  # Change as needed
     graphs_folder = 'dataset/graphs/dataset_small'  # Change as needed
     results_folder = 'exps/results'  # Change as needed
 
