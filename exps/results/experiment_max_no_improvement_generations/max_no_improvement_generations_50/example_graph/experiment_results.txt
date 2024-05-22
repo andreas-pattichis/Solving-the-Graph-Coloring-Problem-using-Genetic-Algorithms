@@ -1,0 +1,55 @@
+Experiment: max_no_improvement_generations_50
+Graph: example_graph
+
+Run 1:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 3), (4, 1), (5, 1), (6, 5), (7, 3), (8, 1)]
+Fitness value: 200.0
+Number of colors used: 4
+
+Run 2:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 3), (4, 7), (5, 1), (6, 6), (7, 7), (8, 3)]
+Fitness value: 160.0
+Number of colors used: 5
+
+Run 3:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 5), (4, 1), (5, 2), (6, 0), (7, 1), (8, 7)]
+Fitness value: 160.0
+Number of colors used: 5
+
+Run 4:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 5), (4, 7), (5, 1), (6, 0), (7, 5), (8, 7)]
+Fitness value: 200.0
+Number of colors used: 4
+
+Run 5:
+Individual (node, color pairs): [(1, 0), (2, 7), (3, 6), (4, 0), (5, 1), (6, 0), (7, 7), (8, 1)]
+Fitness value: 200.0
+Number of colors used: 4
+
+Run 6:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 4), (4, 6), (5, 3), (6, 5), (7, 3), (8, 6)]
+Fitness value: 160.0
+Number of colors used: 5
+
+Run 7:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 1), (4, 3), (5, 3), (6, 0), (7, 7), (8, 1)]
+Fitness value: 200.0
+Number of colors used: 4
+
+Run 8:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 2), (4, 3), (5, 3), (6, 1), (7, 3), (8, 2)]
+Fitness value: 200.0
+Number of colors used: 4
+
+Run 9:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 3), (4, 4), (5, 4), (6, 7), (7, 2), (8, 3)]
+Fitness value: 160.0
+Number of colors used: 5
+
+Run 10:
+Individual (node, color pairs): [(1, 0), (2, 0), (3, 5), (4, 6), (5, 4), (6, 1), (7, 0), (8, 6)]
+Fitness value: 160.0
+Number of colors used: 5
+
+Average total time for 10 runs: 0.61 seconds
+Average fitness value over 10 runs: 180.00
