@@ -1,6 +1,7 @@
 import os
 import time
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from gcp_implementation.graph import Graph
 import gcp_implementation.ga_colorize as ga_colorize
@@ -15,7 +16,10 @@ def run_experiment(graph_path, ga_params_path):
     fitness_values = []
     best_fitness_per_generation = []
     run_results = []
-    stopping_generations = []  # To store the stopping generation for each run
+    stopping_generations = []
+    first_4_color_generation = []  # Track the first generation where 4 colors are found
+    first_min_color_generation = []  # Track the first generation where the minimum number of colors is found
+    colors_per_generation = []  # Track the number of colors used in each generation
 
     for run_index in range(ga_params['num_runs']):
         start_time = time.time()
@@ -23,6 +27,11 @@ def run_experiment(graph_path, ga_params_path):
         solutions = [colorizer.find_best_individual(individuals)]
         generation_times_run = []
         best_fitness_gen_run = []
+        colors_gen_run = []
+
+        found_4_colors = False
+        min_colors = float('inf')
+        min_color_generation = -1
 
         for generation in range(ga_params['num_generations']):
             gen_start_time = time.time()
@@ -36,13 +45,30 @@ def run_experiment(graph_path, ga_params_path):
             gen_end_time = time.time()
             generation_times_run.append(gen_end_time - gen_start_time)
 
-            # Record the best fitness found in this generation
             valid_solutions = [solution for solution in solutions if solution[0] is not None]
             if valid_solutions:
                 _, best_fitness = max(valid_solutions, key=lambda x: x[1])
                 best_fitness_gen_run.append(best_fitness)
+
+                # Track the number of colors
+                best_solution = max(valid_solutions, key=lambda x: x[1])[0]
+                decoded_solution = colorizer.decode_individual(best_solution)
+                num_colors = len(set(color for _, color in decoded_solution))
+                colors_gen_run.append(num_colors)
+
+                # Check for 4-color solution
+                if num_colors <= 4 and not found_4_colors:
+                    first_4_color_generation.append(generation)
+                    found_4_colors = True
+
+                # Update the minimum colors
+                if num_colors < min_colors:
+                    min_colors = num_colors
+                    min_color_generation = generation
+
             else:
-                best_fitness_gen_run.append(0)  # Or any other default value indicating no valid solution
+                best_fitness_gen_run.append(0)
+                colors_gen_run.append(0)
 
             if colorizer.check_end_conditions(generation, solutions):
                 stopping_generations.append(generation)
@@ -50,12 +76,19 @@ def run_experiment(graph_path, ga_params_path):
         else:
             stopping_generations.append(ga_params['num_generations'])
 
+        if not found_4_colors:
+            first_4_color_generation.append(-1)
+        if min_color_generation != -1:
+            first_min_color_generation.append(min_color_generation)
+        else:
+            first_min_color_generation.append(-1)
+
         generation_times.append(generation_times_run)
         total_times.append(time.time() - start_time)
-        fitness_values.append(best_fitness_gen_run[-1])  # Best fitness at the last generation
+        fitness_values.append(best_fitness_gen_run[-1])
         best_fitness_per_generation.append(best_fitness_gen_run)
+        colors_per_generation.append(colors_gen_run)
 
-        # Store run results
         valid_solutions = [solution for solution in solutions if solution[0] is not None]
         if valid_solutions:
             best_individual, best_fitness = max(valid_solutions, key=lambda x: x[1])
@@ -63,10 +96,9 @@ def run_experiment(graph_path, ga_params_path):
             num_colors = len(set(col for _, col in decoded_solution))
             run_results.append((decoded_solution, best_fitness, num_colors))
         else:
-            run_results.append(([], 0, 0))  # Default value if no valid solution found
+            run_results.append(([], 0, 0))
 
-    return generation_times, total_times, fitness_values, best_fitness_per_generation, run_results, stopping_generations
-
+    return generation_times, total_times, fitness_values, best_fitness_per_generation, run_results, stopping_generations, first_4_color_generation, first_min_color_generation, colors_per_generation
 
 def plot_results(generation_times, total_times, fitness_values, best_fitness_per_generation, output_dir,
                  experiment_name, graph_name):
@@ -125,8 +157,6 @@ def plot_results(generation_times, total_times, fitness_values, best_fitness_per
     plt.close()
 
 
-
-
 def save_results(filename, run_results, avg_total_time, avg_fitness, experiment_name, graph_name):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(f"Experiment: {experiment_name}\n")
@@ -142,9 +172,10 @@ def save_results(filename, run_results, avg_total_time, avg_fitness, experiment_
 
 
 def save_results_csv(filename, generation_times, total_times, fitness_values, avg_total_time, avg_fitness,
-                     experiment_name, graph_name, run_results, stopping_generations, best_fitness_per_generation):
+                     experiment_name, graph_name, run_results, stopping_generations, best_fitness_per_generation,
+                     first_4_color_generation, first_min_color_generation, colors_per_generation):
     num_runs = len(generation_times)
-    num_generations = len(generation_times[0])
+    num_generations = max(len(gen_times) for gen_times in generation_times)
 
     avg_generation_times = [sum(gen_times) / num_runs for gen_times in zip(*generation_times)]
     best_fitness_per_run = [run[1] for run in run_results]
@@ -161,8 +192,15 @@ def save_results_csv(filename, generation_times, total_times, fitness_values, av
         'Avg Number of Colors Used': avg_num_colors_per_run,
         'Average Total Time': [avg_total_time] * num_runs,
         'Average Fitness': [avg_fitness] * num_runs,
-        'Stopping Generation': stopping_generations
+        'Stopping Generation': stopping_generations,
+        'First 4 Color Generation': first_4_color_generation,
+        'First Min Color Generation': first_min_color_generation
     }
+
+    # Ensure all lists in `data` are the same length
+    min_length = min(len(lst) for lst in data.values())
+    for key in data:
+        data[key] = data[key][:min_length]
 
     df = pd.DataFrame(data)
     df.to_csv(filename, index=False, encoding='utf-8')
@@ -172,18 +210,21 @@ def save_results_csv(filename, generation_times, total_times, fitness_values, av
         'Run': [],
         'Generation': [],
         'Generation Time': [],
-        'Best Fitness': []
+        'Best Fitness': [],
+        'Num Colors': []
     }
-    for run_idx, gen_times_run in enumerate(generation_times):
-        for gen_idx, gen_time in enumerate(gen_times_run):
+    for run_idx, (gen_times_run, colors_run) in enumerate(zip(generation_times, colors_per_generation)):
+        for gen_idx, (gen_time, num_colors) in enumerate(zip(gen_times_run, colors_run)):
             gen_data['Run'].append(run_idx + 1)
             gen_data['Generation'].append(gen_idx + 1)
             gen_data['Generation Time'].append(gen_time)
             gen_data['Best Fitness'].append(best_fitness_per_generation[run_idx][gen_idx])
+            gen_data['Num Colors'].append(num_colors)
 
     gen_df = pd.DataFrame(gen_data)
     gen_filename = filename.replace('.csv', '_generation_data.csv')
     gen_df.to_csv(gen_filename, index=False, encoding='utf-8')
+
 
 
 def aggregate_experiment_results(experiment_results_folder):
@@ -195,10 +236,18 @@ def aggregate_experiment_results(experiment_results_folder):
         for file in os.listdir(folder):
             if file.endswith("experiment_results.csv"):
                 df = pd.read_csv(os.path.join(folder, file))
+                if df.empty:
+                    # Create a DataFrame with NaN values if the original is empty
+                    columns = ['Experiment', 'Graph', 'Run', 'Avg Generation Time', 'Total Run Time', 'Final Fitness Value',
+                               'Best Fitness Value', 'Avg Number of Colors Used', 'Average Total Time', 'Average Fitness',
+                               'Stopping Generation', 'First 4 Color Generation', 'First Min Color Generation']
+                    df = pd.DataFrame(np.nan, index=[0], columns=columns)
+                    df['Graph'] = os.path.basename(folder)
                 aggregate_data.append(df)
 
     if aggregate_data:
-        all_results = pd.concat(aggregate_data)
+        all_results = pd.concat(aggregate_data, ignore_index=True)
+
         summary = all_results.groupby(['Experiment', 'Graph']).agg(
             Avg_Generation_Time=('Avg Generation Time', 'mean'),
             Total_Run_Time=('Total Run Time', 'mean'),
@@ -208,7 +257,9 @@ def aggregate_experiment_results(experiment_results_folder):
             Avg_Total_Time=('Average Total Time', 'mean'),
             Avg_Fitness=('Average Fitness', 'mean'),
             Fitness_Std=('Final Fitness Value', 'std'),
-            Avg_Stopping_Generation=('Stopping Generation', 'mean')  # Include average stopping generation
+            Avg_Stopping_Generation=('Stopping Generation', 'mean'),
+            Avg_First_4_Color_Generation=('First 4 Color Generation', 'mean'),
+            Avg_First_Min_Color_Generation=('First Min Color Generation', 'mean')
         ).reset_index()
 
         overall_avg = summary.mean(numeric_only=True)
@@ -216,8 +267,13 @@ def aggregate_experiment_results(experiment_results_folder):
         overall_avg['Graph'] = 'Overall'
         summary = pd.concat([summary, pd.DataFrame([overall_avg])], ignore_index=True)
 
+        # Remove averages for the specified columns in the overall row
+        summary.loc[summary['Experiment'] == 'Overall', 'Avg_First_4_Color_Generation'] = None
+        summary.loc[summary['Experiment'] == 'Overall', 'Avg_First_Min_Color_Generation'] = None
+
         summary_file = os.path.join(experiment_results_folder, "aggregate_summary.csv")
         summary.to_csv(summary_file, index=False, encoding='utf-8')
+
 
 
 def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
@@ -237,7 +293,7 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
             output_dir = os.path.join(experiment_results_folder, graph_name)
             os.makedirs(output_dir, exist_ok=True)
 
-            generation_times, total_times, fitness_values, best_fitness_per_generation, run_results, stopping_generations = run_experiment(
+            generation_times, total_times, fitness_values, best_fitness_per_generation, run_results, stopping_generations, first_4_color_generation, first_min_color_generation, colors_per_generation = run_experiment(
                 graph_path, ga_params_path)
             plot_results(generation_times, total_times, fitness_values, best_fitness_per_generation, output_dir,
                          experiment_name, graph_name)
@@ -249,13 +305,13 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
             csv_filename = os.path.join(output_dir, 'experiment_results.csv')
             save_results_csv(csv_filename, generation_times, total_times, fitness_values, avg_total_time, avg_fitness,
                              experiment_name, graph_name, run_results, stopping_generations,
-                             best_fitness_per_generation)
+                             best_fitness_per_generation, first_4_color_generation, first_min_color_generation, colors_per_generation)
 
         aggregate_experiment_results(experiment_results_folder)
 
 
 def main():
-    ga_params_folder = 'dataset/ga_params/experiment_max_no_improvement_generations'  # Change as needed
+    ga_params_folder = 'dataset/ga_params/experiment_baseline'  # Change as needed
     graphs_folder = 'dataset/graphs/dataset_small'  # Change as needed
     results_folder = 'exps/results'  # Change as needed
 
