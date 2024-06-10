@@ -3,7 +3,7 @@ import ga_colorize
 
 if __name__ == '__main__':
     # test the graph implementation
-    path = '../dataset/graphs/dataset_small/example_graph.txt'
+    path = '../dataset/graphs/dataset_small/ExampleGraph.txt'
     graph = Graph(path)
     print(graph)
 
@@ -13,7 +13,7 @@ if __name__ == '__main__':
     for edge in graph.edges:
         print(edge)
 
-colorizer = ga_colorize.GAColorize('../dataset/graphs/dataset_small/example_graph.txt',
+colorizer = ga_colorize.GAColorize('../dataset/graphs/dataset_small/ExampleGraph.txt',
                                    '../dataset/ga_params/experiment_baseline/baseline.txt')
 
 results = colorizer.run_genetic_algorithm()

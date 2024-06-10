@@ -120,25 +120,6 @@ class GAColorize:
 
         return individuals  # Step 6: Return the generated population
 
-    # def check_end_conditions(self, gen_num, solutions):
-    #     """
-    #     Check if the end conditions are met for the genetic algorithm. The algorithm will stop if:
-    #     1. The number of generations exceeds the maximum number of generations.
-    #     2. There is no improvement for a certain number of generations.
-    #     """
-    #     no_improvement_detected = False
-    #
-    #     # Check if the number of generations exceeds the threshold for checking improvements
-    #     if gen_num > self.ga_params['max_no_improvement_generations']:
-    #         latest_solution = solutions[-1]
-    #         past_solutions = solutions[-self.ga_params['max_no_improvement_generations']:-1]
-    #
-    #         # Check if there has been no improvement in the fitness value
-    #         no_improvement_detected = latest_solution[1] <= past_solutions[0][1]
-    #
-    #     # Stop if the maximum number of generations is reached or if there is no improvement
-    #     return gen_num == self.ga_params['num_generations'] or no_improvement_detected
-
     def check_end_conditions(self, gen_num, solutions):
         """
         Check if the end conditions are met for the genetic algorithm. The algorithm will stop if:
@@ -341,4 +322,4 @@ class GAColorize:
         return results
 
 # Example usage
-# GAColorize('example_graph.txt', 'baseline.txt')
+# GAColorize('ExampleGraph.txt', 'baseline.txt')
