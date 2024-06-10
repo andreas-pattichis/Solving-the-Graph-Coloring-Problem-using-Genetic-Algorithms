@@ -17,7 +17,7 @@ parameter_variations = {
     "num_individuals": [25, 50, 100, 150, 200],  # Varying population size for diversity vs. computation
     "mutation_prob": [0.001, 0.01, 0.03, 0.05, 0.1],  # Varying mutation rate for exploration
     "crossover_prob": [0.1, 0.6, 0.8,  0.9, 0.95],  # Varying crossover rate for recombination effects
-    "max_no_improvement_generations": [10, 20, 30, 40]  # Varying patience for improvement
+    "max_no_improvement_generations": [10, 20, 30, 40, 50]  # Varying patience for improvement
 }
 
 
