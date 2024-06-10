@@ -7,17 +7,17 @@ baseline_params = {
     "num_individuals": 100,  # Common population size balancing diversity and computation
     "mutation_prob": 0.05,  # Typical mutation rate providing sufficient diversity
     "crossover_prob": 0.8,  # Common crossover rate encouraging recombination
-    "max_no_improvement_generations": 100  # Standard patience for improvement
+    "max_no_improvement_generations": 30  # Standard patience for improvement
 }
 
 # Parameter variations, exploring the effect of different ranges
 parameter_variations = {
     "num_runs": [5, 10, 20],  # Varying number of runs to see effect on reliability
-    "num_generations": [50, 100, 200],  # Varying generations to check convergence speed
-    "num_individuals": [50, 100, 200],  # Varying population size for diversity vs. computation
-    "mutation_prob": [0.01, 0.05, 0.1],  # Varying mutation rate for exploration
-    "crossover_prob": [0.6, 0.8, 0.9],  # Varying crossover rate for recombination effects
-    "max_no_improvement_generations": [50, 100, 200]  # Varying patience for improvement
+    "num_generations": [25, 50, 100, 150, 200],  # Varying generations to check convergence speed
+    "num_individuals": [25, 50, 100, 150, 200],  # Varying population size for diversity vs. computation
+    "mutation_prob": [0.001, 0.01, 0.03, 0.05, 0.1],  # Varying mutation rate for exploration
+    "crossover_prob": [0.1, 0.6, 0.8,  0.9, 0.95],  # Varying crossover rate for recombination effects
+    "max_no_improvement_generations": [10, 20, 30, 40]  # Varying patience for improvement
 }
 
 

@@ -1,0 +1,23 @@
+BullGraph.col: https://mathworld.wolfram.com/BullGraph.html
+ButterflyGraph.col: https://mathworld.wolfram.com/ButterflyGraph.html
+CubeGraph.col: https://mathworld.wolfram.com/CubeGraph.html
+Cycle3.col
+Cycle4.col
+Cycle5.col
+DiamondGraph.col
+GrötzschGraph.col
+K4Graph.col
+K5Graph.col
+LetterA.col
+LetterB.col
+LetterC.col
+LetterD.col
+LetterE.col
+LetterF.col
+MoserSpindle.col
+Octahedron.col
+PetersenGraph.col
+Square.col
+Triangle.col
+Wheel6Graph.col
+example_graph

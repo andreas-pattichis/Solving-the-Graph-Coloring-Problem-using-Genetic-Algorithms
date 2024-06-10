@@ -81,12 +81,13 @@ def plot_results(generation_times, total_times, fitness_values, best_fitness_per
     plt.savefig(os.path.join(output_dir, 'avg_generation_time.png'))
     plt.close()
 
-    # Plot Fitness Values per Run using a box plot
+    # Plot Fitness Values per Run
     plt.figure()
-    plt.boxplot(fitness_values, vert=True, patch_artist=True, labels=[f'Run {i+1}' for i in range(num_runs)])
+    plt.plot(range(num_runs), fitness_values, label='Fitness Value', linewidth=2)
     plt.xlabel('Run')
     plt.ylabel('Fitness')
     plt.title(f'Fitness Values per Run\nExperiment: {experiment_name}, Graph: {graph_name}')
+    plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
     plt.grid(True)
     plt.savefig(os.path.join(output_dir, 'fitness_values_per_run.png'), bbox_inches='tight')
     plt.close()
@@ -211,7 +212,7 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
 
 
 def main():
-    ga_params_folder = 'dataset/ga_params/experiment_baseline'  # Change as needed
+    ga_params_folder = 'dataset/ga_params/experiment_num_runs'  # Change as needed
     graphs_folder = 'dataset/graphs/dataset_small'  # Change as needed
     results_folder = 'exps/results'  # Change as needed
 

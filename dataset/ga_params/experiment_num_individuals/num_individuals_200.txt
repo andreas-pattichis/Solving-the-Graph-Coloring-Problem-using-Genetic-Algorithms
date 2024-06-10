@@ -3,4 +3,4 @@ num_generations 100
 num_individuals 200
 mutation_prob 0.05
 crossover_prob 0.8
-max_no_improvement_generations 100
+max_no_improvement_generations 30

@@ -1,6 +1,6 @@
-num_runs 5
+num_runs 10
 num_generations 100
 num_individuals 100
 mutation_prob 0.05
-crossover_prob 0.8
+crossover_prob 0.1
 max_no_improvement_generations 30
