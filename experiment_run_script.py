@@ -71,15 +71,28 @@ def run_experiment(graph_path, ga_params_path):
 def plot_results(generation_times, total_times, fitness_values, best_fitness_per_generation, output_dir,
                  experiment_name, graph_name):
     num_runs = len(generation_times)
-    num_generations = len(generation_times[0])
 
-    avg_generation_times = [sum(gen_times) / num_runs for gen_times in zip(*generation_times)]
+    # Determine the maximum number of generations
+    max_generations = max(len(gen_times) for gen_times in generation_times)
+
+    # Initialize avg_generation_times with zeros
+    avg_generation_times = [0] * max_generations
+    generation_counts = [0] * max_generations
+
+    for gen_times in generation_times:
+        for i, gen_time in enumerate(gen_times):
+            avg_generation_times[i] += gen_time
+            generation_counts[i] += 1
+
+    # Compute the average by dividing by the number of runs for each generation
+    avg_generation_times = [avg_generation_times[i] / generation_counts[i] for i in range(max_generations)]
+
     avg_total_time = sum(total_times) / num_runs
     avg_fitness = sum(fitness_values) / num_runs
 
     # Plot Average Generation Time per Generation
     plt.figure()
-    plt.plot(range(num_generations), avg_generation_times, label='Avg Generation Time', linewidth=2)
+    plt.plot(range(max_generations), avg_generation_times, label='Avg Generation Time', linewidth=2)
     plt.xlabel('Generation')
     plt.ylabel('Time (s)')
     plt.title(f'Average Generation Time per Generation\nExperiment: {experiment_name}, Graph: {graph_name}')
@@ -102,7 +115,7 @@ def plot_results(generation_times, total_times, fitness_values, best_fitness_per
     # Plot Best Fitness Value per Generation Across Runs
     plt.figure()
     for i, run in enumerate(best_fitness_per_generation):
-        plt.plot(range(num_generations), run, alpha=0.7, linewidth=2, label=f'Run {i + 1}')
+        plt.plot(range(len(run)), run, alpha=0.7, linewidth=2, label=f'Run {i + 1}')
     plt.xlabel('Generation')
     plt.ylabel('Fitness')
     plt.title(f'Best Fitness Value per Generation Across Runs\nExperiment: {experiment_name}, Graph: {graph_name}')
@@ -110,6 +123,8 @@ def plot_results(generation_times, total_times, fitness_values, best_fitness_per
     plt.grid(True)
     plt.savefig(os.path.join(output_dir, 'best_fitness_per_generation.png'), bbox_inches='tight')
     plt.close()
+
+
 
 
 def save_results(filename, run_results, avg_total_time, avg_fitness, experiment_name, graph_name):
@@ -240,7 +255,7 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
 
 
 def main():
-    ga_params_folder = 'dataset/ga_params/experiment_baseline'  # Change as needed
+    ga_params_folder = 'dataset/ga_params/experiment_max_no_improvement_generations'  # Change as needed
     graphs_folder = 'dataset/graphs/dataset_small'  # Change as needed
     results_folder = 'exps/results'  # Change as needed
 
