@@ -15,6 +15,7 @@ def run_experiment(graph_path, ga_params_path):
     fitness_values = []
     best_fitness_per_generation = []
     run_results = []
+    stopping_generations = []  # To store the stopping generation for each run
 
     for run_index in range(ga_params['num_runs']):
         start_time = time.time()
@@ -43,6 +44,12 @@ def run_experiment(graph_path, ga_params_path):
             else:
                 best_fitness_gen_run.append(0)  # Or any other default value indicating no valid solution
 
+            if colorizer.check_end_conditions(generation, solutions):
+                stopping_generations.append(generation)
+                break
+        else:
+            stopping_generations.append(ga_params['num_generations'])
+
         generation_times.append(generation_times_run)
         total_times.append(time.time() - start_time)
         fitness_values.append(best_fitness_gen_run[-1])  # Best fitness at the last generation
@@ -58,7 +65,7 @@ def run_experiment(graph_path, ga_params_path):
         else:
             run_results.append(([], 0, 0))  # Default value if no valid solution found
 
-    return generation_times, total_times, fitness_values, best_fitness_per_generation, run_results
+    return generation_times, total_times, fitness_values, best_fitness_per_generation, run_results, stopping_generations
 
 
 def plot_results(generation_times, total_times, fitness_values, best_fitness_per_generation, output_dir,
@@ -120,7 +127,7 @@ def save_results(filename, run_results, avg_total_time, avg_fitness, experiment_
 
 
 def save_results_csv(filename, generation_times, total_times, fitness_values, avg_total_time, avg_fitness,
-                     experiment_name, graph_name, run_results):
+                     experiment_name, graph_name, run_results, stopping_generations, best_fitness_per_generation):
     num_runs = len(generation_times)
     num_generations = len(generation_times[0])
 
@@ -138,11 +145,30 @@ def save_results_csv(filename, generation_times, total_times, fitness_values, av
         'Best Fitness Value': best_fitness_per_run,
         'Avg Number of Colors Used': avg_num_colors_per_run,
         'Average Total Time': [avg_total_time] * num_runs,
-        'Average Fitness': [avg_fitness] * num_runs
+        'Average Fitness': [avg_fitness] * num_runs,
+        'Stopping Generation': stopping_generations
     }
 
     df = pd.DataFrame(data)
     df.to_csv(filename, index=False, encoding='utf-8')
+
+    # Save detailed generation data
+    gen_data = {
+        'Run': [],
+        'Generation': [],
+        'Generation Time': [],
+        'Best Fitness': []
+    }
+    for run_idx, gen_times_run in enumerate(generation_times):
+        for gen_idx, gen_time in enumerate(gen_times_run):
+            gen_data['Run'].append(run_idx + 1)
+            gen_data['Generation'].append(gen_idx + 1)
+            gen_data['Generation Time'].append(gen_time)
+            gen_data['Best Fitness'].append(best_fitness_per_generation[run_idx][gen_idx])
+
+    gen_df = pd.DataFrame(gen_data)
+    gen_filename = filename.replace('.csv', '_generation_data.csv')
+    gen_df.to_csv(gen_filename, index=False, encoding='utf-8')
 
 
 def aggregate_experiment_results(experiment_results_folder):
@@ -166,7 +192,8 @@ def aggregate_experiment_results(experiment_results_folder):
             Avg_Number_of_Colors_Used=('Avg Number of Colors Used', 'mean'),
             Avg_Total_Time=('Average Total Time', 'mean'),
             Avg_Fitness=('Average Fitness', 'mean'),
-            Fitness_Std=('Final Fitness Value', 'std')
+            Fitness_Std=('Final Fitness Value', 'std'),
+            Avg_Stopping_Generation=('Stopping Generation', 'mean')  # Include average stopping generation
         ).reset_index()
 
         overall_avg = summary.mean(numeric_only=True)
@@ -195,7 +222,7 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
             output_dir = os.path.join(experiment_results_folder, graph_name)
             os.makedirs(output_dir, exist_ok=True)
 
-            generation_times, total_times, fitness_values, best_fitness_per_generation, run_results = run_experiment(
+            generation_times, total_times, fitness_values, best_fitness_per_generation, run_results, stopping_generations = run_experiment(
                 graph_path, ga_params_path)
             plot_results(generation_times, total_times, fitness_values, best_fitness_per_generation, output_dir,
                          experiment_name, graph_name)
@@ -206,13 +233,14 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
             save_results(results_filename, run_results, avg_total_time, avg_fitness, experiment_name, graph_name)
             csv_filename = os.path.join(output_dir, 'experiment_results.csv')
             save_results_csv(csv_filename, generation_times, total_times, fitness_values, avg_total_time, avg_fitness,
-                             experiment_name, graph_name, run_results)
+                             experiment_name, graph_name, run_results, stopping_generations,
+                             best_fitness_per_generation)
 
         aggregate_experiment_results(experiment_results_folder)
 
 
 def main():
-    ga_params_folder = 'dataset/ga_params/experiment_num_runs'  # Change as needed
+    ga_params_folder = 'dataset/ga_params/experiment_baseline'  # Change as needed
     graphs_folder = 'dataset/graphs/dataset_small'  # Change as needed
     results_folder = 'exps/results'  # Change as needed
 
