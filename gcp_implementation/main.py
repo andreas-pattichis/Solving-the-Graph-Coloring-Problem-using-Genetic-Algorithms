@@ -1,5 +1,6 @@
 from graph import Graph
-import ga_colorize
+from gcp_implementation.ga_colorize import GAColorize as GAColorizeFixed
+from gcp_implementation.ga_colorize_original_adaptative import GAColorize as GAColorizeAdaptive
 
 if __name__ == '__main__':
     # test the graph implementation
@@ -13,8 +14,17 @@ if __name__ == '__main__':
     for edge in graph.edges:
         print(edge)
 
-colorizer = ga_colorize.GAColorize('../dataset/graphs/dataset_small/ExampleGraph.txt',
+# Uncomment the following lines to run the genetic algorithm with the fixed parameters
+colorizer = GAColorizeFixed('../dataset/graphs/dataset_small/BullGraph.col.txt',
                                    '../dataset/ga_params/experiment_baseline/baseline.txt')
+
+# Uncomment the following lines to run the genetic algorithm with the adaptive parameters (DHM-ILC)
+# colorizer = GAColorizeAdaptive('../dataset/graphs/dataset_small/BullGraph.col.txt',
+#                                     '../dataset/ga_params/experiment_adaptative_DHM-ILC/DHM-ILC.txt')
+
+# # Uncomment the following lines to run the genetic algorithm with the adaptive parameters (ILM-DHC)
+# colorizer = GAColorizeAdaptive('../dataset/graphs/dataset_small/BullGraph.col.txt',
+#                                     '../dataset/ga_params/experiment_adaptative_ILM-DHC/ILM-DHC.txt')
 
 results = colorizer.run_genetic_algorithm()
 best_fitness = 0
