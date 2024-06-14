@@ -6,7 +6,7 @@ This project implements a Genetic Algorithm (GA) to solve the Graph Coloring Pro
 ## Repository Contents
 - `dataset/`: Contains the graph datasets and GA parameters for different experiments.
   - `graphs/`: Datasets for graphs used in the experiments.
-    - `dataset_small/`: Example graphs such as `BullGraph.col.txt`, `ButterflyGraph.col.txt`, `Cycle3.col.txt`, etc.
+    - `dataset_small/`: Dataset with graphs such as `BullGraph.col.txt`, `ButterflyGraph.col.txt`, `Cycle3.col.txt`, etc.
   - `ga_params/`: Different sets of GA parameters for creating various experiments.
     - `experiment_baseline/`
     - `experiment_crossover_prob/`
