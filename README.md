@@ -15,6 +15,8 @@ This project implements a Genetic Algorithm (GA) to solve the Graph Coloring Pro
     - `experiment_num_generations/`
     - `experiment_num_individuals/`
     - `experiment_num_runs/`
+    - `experiment_adaptative_DHM-ILC`
+    - `experiment_adaptative_ILM-DHC`
     - `create_ga_params_datasets_script.py`: Script to quickly create and adjust GA parameter sets for experiments.
 - `gcp_implementation/`: Implementation of the GA for solving the GCP.
   - `ga_colorize.py`: Implementation of the GA with fixed parameters.
