@@ -63,13 +63,13 @@ def run_experiment(graph_path, ga_params_path):
             gen_start_time = time.time()
 
             individuals = colorizer.select_individuals(individuals, tournament_size=tournament_size)
-            #commented below can be found the parameters in the ILM/DHC mode
-            #mutation_probability = generation/ga_params['num_generations']
-            #crossover_probability = 1 - generation/ga_params['num_generations']
+            # commented below can be found the parameters in the ILM/DHC mode
+            # mutation_probability = generation/ga_params['num_generations']
+            # crossover_probability = 1 - generation/ga_params['num_generations']
 
-            #below can be found the parameters in the DHM/ILC
-            crossover_probability = generation/ga_params['num_generations']
-            mutation_probability = 1 - generation/ga_params['num_generations']
+            # below can be found the parameters in the DHM/ILC
+            crossover_probability = generation / ga_params['num_generations']
+            mutation_probability = 1 - generation / ga_params['num_generations']
             individuals = colorizer.apply_crossover(individuals, crossover_probability)
             individuals = colorizer.apply_mutation(individuals, mutation_probability)
 
@@ -380,7 +380,8 @@ def run_all_experiments(ga_params_folder, graphs_folder, results_folder):
 
 
 def main():
-    ga_params_folder = 'dataset/ga_params/experiment_baseline'  # Change as needed
+    # ga_params_folder = 'dataset/ga_params/experiment_adaptative_DHM-ILC'  # Uncomment as needed
+    ga_params_folder = 'dataset/ga_params/experiment_adaptative_ILM-DHC'  # Uncomment as needed
     graphs_folder = 'dataset/graphs/dataset_small'  # Change as needed
     results_folder = 'exps/results/baseline_adaptative_DHM_200_ind'  # Change as needed
 
