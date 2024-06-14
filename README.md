@@ -61,6 +61,22 @@ To run the GA for a single graph from the dataset with a specific set of GA para
                            '../dataset/ga_params/experiment_baseline/baseline.txt')
     ```
 
+    Additionally, you can choose from the following three options by uncommenting the corresponding lines:
+
+    ```python
+    # Uncomment the following lines to run the genetic algorithm with the fixed parameters
+    colorizer = GAColorizeFixed('../dataset/graphs/dataset_small/BullGraph.col.txt',
+                                       '../dataset/ga_params/experiment_baseline/baseline.txt')
+    
+    # Uncomment the following lines to run the genetic algorithm with the adaptive parameters (DHM-ILC)
+    # colorizer = GAColorizeAdaptive('../dataset/graphs/dataset_small/BullGraph.col.txt',
+    #                                     '../dataset/ga_params/experiment_adaptative_DHM-ILC/DHM-ILC.txt')
+    
+    # Uncomment the following lines to run the genetic algorithm with the adaptive parameters (ILM-DHC)
+    # colorizer = GAColorizeAdaptive('../dataset/graphs/dataset_small/BullGraph.col.txt',
+    #                                     '../dataset/ga_params/experiment_adaptative_ILM-DHC/ILM-DHC.txt')
+    ```
+
 3. **Run main.py**: Execute the `main.py` script to start the GA for the selected graph and parameters:
     ```bash
     python gcp_implementation/main.py
