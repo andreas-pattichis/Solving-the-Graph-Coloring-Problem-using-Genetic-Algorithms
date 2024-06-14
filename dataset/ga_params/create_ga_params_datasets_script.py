@@ -12,12 +12,12 @@ baseline_params = {
 
 # Parameter variations, exploring the effect of different ranges
 parameter_variations = {
-    "num_runs": [5, 10, 20],  # Varying number of runs to see effect on reliability
-    "num_generations": [25, 50, 100, 150, 200],  # Varying generations to check convergence speed
-    "num_individuals": [25, 50, 100, 150, 200],  # Varying population size for diversity vs. computation
-    "mutation_prob": [0.001, 0.01, 0.03, 0.05, 0.1],  # Varying mutation rate for exploration
-    "crossover_prob": [0.1, 0.6, 0.8,  0.9, 0.95],  # Varying crossover rate for recombination effects
-    "max_no_improvement_generations": [10, 20, 30, 40, 50]  # Varying patience for improvement
+    "num_runs": [5, 20],  # Varying number of runs to see effect on reliability
+    "num_generations": [25, 50, 150, 200],  # Varying generations to check convergence speed
+    "num_individuals": [25, 50, 150, 200],  # Varying population size for diversity vs. computation
+    "mutation_prob": [0.001, 0.01, 0.03, 0.1],  # Varying mutation rate for exploration
+    "crossover_prob": [0.1, 0.6, 0.9, 0.95],  # Varying crossover rate for recombination effects
+    "max_no_improvement_generations": [10, 20, 40, 50]  # Varying patience for improvement
 }
 
 
