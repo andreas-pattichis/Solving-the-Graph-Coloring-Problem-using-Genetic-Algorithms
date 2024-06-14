@@ -1,8 +1,9 @@
 import math
 import random
 
-from gcp_implementation.graph import Graph
 from tabulate import tabulate
+
+from gcp_implementation.graph import Graph
 
 
 class GAColorize:
@@ -51,7 +52,9 @@ class GAColorize:
         colors. The color of the node is encoded as a binary number. The binary sequences of all nodes are concatenated
         to form the individual.
         """
-        result = sum(color << (vertex * self.ga_params['bits_per_individual']) for vertex, color in color_pairs)
+        result = 0
+        for vertex, color in color_pairs:
+            result |= color << ((vertex - 1) * self.ga_params['bits_per_individual'])
         return result
 
     def decode_individual(self, binary_seq):
@@ -60,18 +63,19 @@ class GAColorize:
         shifting bits. Return a list of pairs (node_id, color).
         """
         color_pairs = []
-        mask = (1 << self.ga_params['bits_per_individual']) - 1  # Mask with `bit_size` number of 1s
+        mask = (1 << self.ga_params['bits_per_individual']) - 1  # Mask with `bits_per_individual` number of 1s
 
         for node in range(self.ga_params['num_nodes']):
             color = (binary_seq >> (node * self.ga_params['bits_per_individual'])) & mask
-            color_pairs.append((node, color))
+            color_pairs.append((node + 1, color))
 
-        return [(node + 1, color) for node, color in color_pairs]
+        return color_pairs
 
     def get_color(self, nodes_colors, node):
         for n, color in nodes_colors:
             if n == node:
                 return color
+        return None
 
     def validate_coloring(self, nodes_colors):
         """
@@ -79,31 +83,28 @@ class GAColorize:
 
         Parameters:
         - nodes_colors: A list of tuples where each tuple contains a node (vertex) and its assigned color.
-          Example: [(0, 1), (1, 2), (2, 3), (3, 4), (4, 0)] means vertex 0 is colored 1, vertex 1 is colored 2, and so
-          on.
         """
-        edges = self.graph.edges  # Step 1: Retrieve the list of edges from the graph
-        # print(edges)
-        # print(nodes_colors)
+        edges = self.graph.edges  # Retrieve the list of edges from the graph
 
-        for node1, node2 in edges:  # Step 2: Iterate over each edge (node1, node2)
-            # print(node1)
-            # print(node2)
+        for node1, node2 in edges:  # Iterate over each edge (node1, node2)
             color1 = self.get_color(nodes_colors, node1)
             color2 = self.get_color(nodes_colors, node2)
 
-            if color1 == color2:  # Step 5: Check if the colors are the same
+            if color1 is None or color2 is None:
+                return False  # If any color is not found, the coloring is invalid
+
+            if color1 == color2:  # Check if the colors are the same
                 return False  # If same color, return False (invalid coloring)
 
-        return True  # Step 6: If all edges checked and valid, return True (valid coloring)
+        return True  # If all edges checked and valid, return True (valid coloring)
 
     def initialize_individuals(self):
         """
         Generate the initial population by randomly selecting valid individuals. The initial population at T = 0 consists
         only of valid graphs.
         """
-        random.seed()  # Step 1: Initialize a random seed
-        individuals = []  # Step 2: Initialize an empty list to store the population
+        random.seed()  # Initialize a random seed
+        individuals = []  # Initialize an empty list to store the population
 
         def create_coloring():
             """Generate a random coloring for the vertices."""
@@ -111,44 +112,43 @@ class GAColorize:
             return [(node + 1, random.choice(available_colors)) for node in range(self.ga_params['num_nodes'])]
 
         while len(individuals) < self.ga_params[
-            'num_individuals']:  # Step 3: Loop until the population reaches the desired size
-            node_coloring = create_coloring()  # Step 4: Generate a node coloring
+            'num_individuals']:  # Loop until the population reaches the desired size
+            node_coloring = create_coloring()  # Generate a node coloring
 
-            if self.validate_coloring(node_coloring):  # Step 5: Validate the generated coloring
+            if self.validate_coloring(node_coloring):  # Validate the generated coloring
                 encoded_individual = self.encode_individual(node_coloring)  # Encode the valid coloring
                 individuals.append(encoded_individual)  # Add to population
 
-        return individuals  # Step 6: Return the generated population
+        return individuals  # Return the generated population
 
     def check_end_conditions(self, gen_num, solutions):
         """
         Check if the end conditions are met for the genetic algorithm. The algorithm will stop if:
         1. The number of generations exceeds the maximum number of generations.
-        2. There is no improvement for a certain number of generations.
+        2. The fitness of the first solution in the last 30 generations is the same as the current fitness.
         """
-        no_improvement_detected = False
+        if gen_num >= self.ga_params['num_generations']:
+            return True
 
-        # Check if the number of generations exceeds the threshold for checking improvements
         if gen_num > self.ga_params['max_no_improvement_generations']:
-            latest_solution = solutions[-1]
-            past_solutions = solutions[-self.ga_params['max_no_improvement_generations']:-1]
+            # Get the first and last solution in the last 30 generations
+            first_solution = solutions[-self.ga_params['max_no_improvement_generations']]
+            # Get the last 30 solutions
+            last_solutions = solutions[-self.ga_params['max_no_improvement_generations']:]
+            # Filter out None solutions
+            last_solutions = [sol for sol in last_solutions if sol is not None and sol[1] is not None]
 
-            # Handle None values
-            if latest_solution[1] is None:
-                latest_fitness = float('-inf')
-            else:
-                latest_fitness = latest_solution[1]
+            if not last_solutions:
+                return False
 
-            past_fitness_values = []
-            for sol in past_solutions:
-                if sol[1] is not None:
-                    past_fitness_values.append(sol[1])
+            # From these get the one with the highest fitness
+            best_last_solution = max(last_solutions, key=lambda x: x[1])
 
-            if past_fitness_values:
-                no_improvement_detected = latest_fitness <= max(past_fitness_values)
+            # If the fitness of the first solution is the same as the best fitness in the last 30 generations
+            if first_solution[1] == best_last_solution[1]:
+                return True
 
-        # Stop if the maximum number of generations is reached or if there is no improvement
-        return gen_num == self.ga_params['num_generations'] or no_improvement_detected
+        return False
 
     def calculate_individuals_fitness(self, individuals):
         """
@@ -170,30 +170,18 @@ class GAColorize:
 
         return fitness_scores
 
-    def select_individuals(self, individuals):
+    def select_individuals(self, individuals, tournament_size=3):
         """
-        Select individuals from the population based on their fitness. Individuals with higher fitness have a higher
-        chance of being selected. The selection is done using the roulette wheel selection method. The selection process
-        is repeated until the desired number of individuals is selected.
+        Select individuals from the population based on their fitness using tournament selection.
         """
         individuals_with_fitness = self.calculate_individuals_fitness(individuals)
 
-        fitness_sum = 0
-        before_selection = []
-        for individual, fitness in individuals_with_fitness:
-            fitness_sum += fitness
-            before_selection.append((individual, fitness_sum))
+        def tournament_selection():
+            selected = random.sample(individuals_with_fitness, tournament_size)
+            return max(selected, key=lambda x: x[1])[0]
 
-        after_selection = []
-
-        for _ in range(self.ga_params['num_individuals']):
-            draw = random.randint(0, int(fitness_sum))
-            for individual, fitness_margin in before_selection:
-                if fitness_margin >= draw:
-                    after_selection.append(individual)
-                    break
-
-        return after_selection
+        selected_individuals = [tournament_selection() for _ in range(self.ga_params['num_individuals'])]
+        return selected_individuals
 
     def apply_crossover(self, individuals):
         """
@@ -229,8 +217,6 @@ class GAColorize:
 
         return new_population
 
-    import random
-
     def apply_mutation(self, individuals):
         """
         Apply mutation to each individual in the population with a given probability.
@@ -262,22 +248,27 @@ class GAColorize:
 
         # Filter and encode only the acceptable colorings
         acceptable_solutions = [
-            self.encode_individual(coloring) for coloring in colorings
+            (self.encode_individual(coloring), coloring) for coloring in colorings
             if self.validate_coloring(coloring)
         ]
 
         if not acceptable_solutions:
             return None, None
 
-        # Choose the best individual from the acceptable solutions
-        best_individual = acceptable_solutions[0]
-        # Decode the best individual to get its coloring
-        best_coloring = self.decode_individual(best_individual)
-        # Calculate the fitness of the best individual
-        unique_colors = set(color for node, color in best_coloring)
-        best_fitness = 100 * self.ga_params['num_nodes'] / len(unique_colors)
+        # Initialize best fitness to a very low value
+        best_fitness = float('-inf')
+        best_individual = None
 
-        # Return the best individual and its fitness (if not found, returns None)
+        # Iterate over acceptable solutions to find the best one
+        for encoded_individual, coloring in acceptable_solutions:
+            unique_colors = set(color for node, color in coloring)
+            fitness = 100 * self.ga_params['num_nodes'] / len(unique_colors)
+
+            if fitness > best_fitness:
+                best_fitness = fitness
+                best_individual = encoded_individual
+
+        # Return the best individual and its fitness
         return best_individual, best_fitness
 
     def run_genetic_algorithm(self):
@@ -298,10 +289,19 @@ class GAColorize:
             generation = 0
             solutions = [self.find_best_individual(individuals)]
 
+            # Determine the appropriate tournament size based on the population size
+            population_size = self.ga_params['num_individuals']
+            if population_size <= 50:
+                tournament_size = 2
+            elif population_size <= 150:
+                tournament_size = 3
+            else:
+                tournament_size = 5
+
             # Run the genetic algorithm until the stop condition is reached
             while not self.check_end_conditions(generation, solutions):
                 # Apply genetic operators
-                individuals = self.select_individuals(individuals)
+                individuals = self.select_individuals(individuals, tournament_size=tournament_size)
                 individuals = self.apply_crossover(individuals)
                 individuals = self.apply_mutation(individuals)
 
@@ -320,6 +320,3 @@ class GAColorize:
 
             results.append((best_individual, best_fitness))
         return results
-
-# Example usage
-# GAColorize('ExampleGraph.txt', 'baseline.txt')
